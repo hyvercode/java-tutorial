@@ -1,0 +1,16 @@
+
+`
+java:S1192"JDefine a constant instead of duplicating this literal "Name is :" 3 times.(„è˜ç
+0
+java:S1220""Move this file to a named package.
+7
+java:S1170"!Make this final field static too.(ûØ²Œ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(„è˜ç
+M	java:S106 "9Replace this use of System.out or System.err by a logger.(ý·â%
+N	java:S106$"9Replace this use of System.out or System.err by a logger.(„è˜ç
+M	java:S106%"9Replace this use of System.out or System.err by a logger.(ý·â%
+N	java:S106&"9Replace this use of System.out or System.err by a logger.(¹åÆ¡
+S	java:S106*"9Replace this use of System.out or System.err by a logger.(Á¬¨òûÿÿÿÿ
+S	java:S106+"9Replace this use of System.out or System.err by a logger.(ò×žˆþÿÿÿÿ
+@
+java:S1068"*Remove this unused "active" private field.(ûØ²Œ
