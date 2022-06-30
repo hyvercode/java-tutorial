@@ -49,7 +49,7 @@ public class Main {
         System.out.println("======================== ArrayList ==================================");
         Animal cat = new Animal("Cat",4);
         Animal dog = new Animal("Dog",4);
-        Animal chiken = new Animal("Chiken",2);
+        Animal chiken = new Animal("Chicken",2);
 
         ArrayList<Animal> animalArrayList = new ArrayList<>();
         animalArrayList.add(cat);
