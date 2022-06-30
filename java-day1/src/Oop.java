@@ -1,5 +1,3 @@
-import com.solusione.inheritance.Car;
-
 import java.io.Serializable;
 
 public class Oop implements Serializable {
