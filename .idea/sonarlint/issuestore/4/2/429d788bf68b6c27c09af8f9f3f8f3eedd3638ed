@@ -1,0 +1,11 @@
+
+o
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(†ÌÊ¨
+0
+java:S1220""Move this file to a named package.
+Q
+java:S1611"/Remove the parentheses around the "n" parameter(ƒûÊŽûÿÿÿÿ8Ó¯°Ÿ›0
+N
+java:S1602",Remove useless curly braces around statement(ƒûÊŽûÿÿÿÿ8Ô¯°Ÿ›0
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(ƒûÊŽûÿÿÿÿ8¯£®Ÿ›0
+T	java:S106"9Replace this use of System.out or System.err by a logger.(ìÛÃz8Ö¯°Ÿ›0
