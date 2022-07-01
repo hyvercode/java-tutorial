@@ -98,8 +98,8 @@ public class HelloControllerTest {
                 .andDo(print())
                 .andReturn();
 
-        String content = result.getResponse().getContentAsString();
-        Assertions.assertThat(content.length()>0);
+        int content = result.getResponse().getContentLength();
+        Assertions.assertThat(content>0);
     }
 
     public static String toJson(final Object obj) {
