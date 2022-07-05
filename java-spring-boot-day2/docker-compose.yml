@@ -1,0 +1,10 @@
+version: '3'
+services:
+  users-service:
+    container_name: java-spring-day2-service
+    restart: on-failure
+    build: ./
+    ports:
+      - '8888:8888'
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "8888" ]

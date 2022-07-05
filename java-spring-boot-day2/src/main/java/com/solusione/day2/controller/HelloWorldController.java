@@ -26,12 +26,12 @@ public class HelloWorldController {
     @GetMapping("/users")
     public List<UserResponse> getUsers() {
 
-        ArrayList<UserResponse> userResponses = new ArrayList<>();
+        ArrayList<UserResponse> userResponseArrayLists = new ArrayList<>();
 
-        userResponses.add(new UserResponse("aldy@gmail", "Aldy"));
-        userResponses.add(new UserResponse("wahyu@gmail", "Wahyu"));
+        userResponseArrayLists.add(new UserResponse("aldy@gmail", "Aldy"));
+        userResponseArrayLists.add(new UserResponse("wahyu@gmail", "Wahyu"));
 
-        return userResponses;
+        return userResponseArrayLists;
     }
 
     @PostMapping("/user")

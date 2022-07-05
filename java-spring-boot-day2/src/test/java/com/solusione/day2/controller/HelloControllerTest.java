@@ -27,7 +27,7 @@ public class HelloControllerTest {
     MockMvc mockMvc;
 
     @Test
-    public void getHelloTest() throws Exception {
+    void getHelloTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/api/hello"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -38,7 +38,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void getHelloFailTest() throws Exception {
+    void getHelloFailTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/api/hello"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -49,7 +49,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void getUserTest() throws Exception {
+    void getUserTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/api/user"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -60,7 +60,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void getUsersTest() throws Exception {
+    void getUsersTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -71,7 +71,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void postUserTest() throws Exception {
+    void postUserTest() throws Exception {
         UserRequest userRequest = new UserRequest("irwan@solusone.id", "irwan");
 
         MvcResult result = mockMvc.perform(post("/api/user")
@@ -87,7 +87,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void postUsersTest() throws Exception {
+    void postUsersTest() throws Exception {
         UserRequest userRequest = new UserRequest("irwan@solusone.id", "irwan");
 
         MvcResult result = mockMvc.perform(post("/api/users")
@@ -99,7 +99,7 @@ public class HelloControllerTest {
                 .andReturn();
 
         int content = result.getResponse().getContentLength();
-        Assertions.assertThat(content>0);
+        Assertions.assertThat(content > 0);
     }
 
     public static String toJson(final Object obj) {
