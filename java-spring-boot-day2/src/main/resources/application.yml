@@ -1,1 +1,14 @@
-
+spring:
+  application:
+    name: java-spring-day2-service
+  rabbitmq:
+    addresses: localhost
+    virtualhost: /
+    port: 15672
+    username: guest
+    password: guest
+    exchange: java-spring-boot-day2.exchange
+    queue: java-spring-boot-day2.queue
+    routingkey: java-spring-boot-day2.routingkey
+server:
+  port : 7070
