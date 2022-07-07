@@ -12,13 +12,13 @@ import java.util.List;
 @RequestMapping("/api")
 public class HelloWorldController {
 
-    RabbitMQSenderService  rabbitMQSenderService;
+//    RabbitMQSenderService  rabbitMQSenderService;
 
     private ArrayList<UserResponse> userResponses = new ArrayList<>();
 
-    public HelloWorldController(RabbitMQSenderService rabbitMQSenderService) {
-        this.rabbitMQSenderService = rabbitMQSenderService;
-    }
+//    public HelloWorldController(RabbitMQSenderService rabbitMQSenderService) {
+//        this.rabbitMQSenderService = rabbitMQSenderService;
+//    }
 
     @GetMapping("/hello")
     public String getHello() {
@@ -48,7 +48,7 @@ public class HelloWorldController {
 
     @PostMapping("/users")
     public List<UserResponse> postUsers(@RequestBody UserRequest userRequest) {
-        rabbitMQSenderService.send(userRequest);
+//        rabbitMQSenderService.send(userRequest);
         userResponses.add(new UserResponse(userRequest.getEmail(), userRequest.getName()));
         return userResponses;
     }

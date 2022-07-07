@@ -2,9 +2,13 @@ package com.solusione.day2.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solusione.day2.model.request.UserRequest;
+import com.solusione.day2.service.RabbitMQSenderService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -25,6 +29,15 @@ public class HelloControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+//    @Autowired
+//    private RabbitMQSenderService rabbitMQSenderService;
+//
+//    @Autowired
+//    private AmqpTemplate amqpTemplate;
+//
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
 
     @Test
     void getHelloTest() throws Exception {

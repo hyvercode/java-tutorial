@@ -1,10 +1,16 @@
 version: '3'
 services:
   users-service:
+    network_mode: localhost
     container_name: java-spring-day2-service
     restart: on-failure
     build: ./
     ports:
-      - '8888:8888'
+      - '7070:7070'
     healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "8888" ]
+      test: [ "CMD", "nc", "-z", "localhost", "7070" ]
+
+networks:
+  default:
+    name: localhost
+    external: true
