@@ -1,6 +1,8 @@
 package com.solusione.day2.service;
 
 import com.solusione.day2.model.entity.Employee;
+import com.solusione.day2.model.request.EmployeeRequest;
+import com.solusione.day2.model.response.EmployeeResponse;
 import com.solusione.day2.repository.EmployeeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,7 @@ public class EmployeeService {
     }
 
 
-    public List<Employee> paginate(int pageNo,int pageSize) {
+    public List<Employee> paginate(int pageNo, int pageSize) {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         Page<Employee> pagedResult = employeeRepository.findAll(paging);
 
@@ -30,35 +32,66 @@ public class EmployeeService {
         return (List<Employee>) employeeRepository.findAll();
     }
 
-    public Employee create(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeResponse create(EmployeeRequest employeeRequest) {
+        Employee employee = Employee.builder()
+                .firstName(employeeRequest.getFirstName())
+                .lastName(employeeRequest.getLastName())
+                .email(employeeRequest.getEmail())
+                .build();
+
+        //Save records
+        Employee response = employeeRepository.save(employee);
+
+        return EmployeeResponse.builder()
+                .id(response.getId())
+                .firstName(response.getFirstName())
+                .lastName(response.getLastName())
+                .email(response.getEmail())
+                .build();
     }
 
-    public Employee update(Long id, Employee employee) {
+    public EmployeeResponse update(Long id, EmployeeRequest employeeRequest) {
         Optional<Employee> employeeOptional = employeeRepository.findById(id);
 
-        if(employeeOptional.isEmpty()){
-          return new Employee();
+        if (employeeOptional.isEmpty()) {
+            return new EmployeeResponse();
         }
 
         Employee newEmployee = employeeOptional.get();
-        newEmployee.setFirstName(employee.getFirstName());
-        newEmployee.setLastName(employee.getLastName());
-        newEmployee.setEmail(employee.getEmail());
-        return employeeRepository.save(newEmployee);
+        newEmployee.setFirstName(employeeRequest.getFirstName());
+        newEmployee.setLastName(employeeRequest.getLastName());
+        newEmployee.setEmail(employeeRequest.getEmail());
+
+        //Save records
+        Employee response = employeeRepository.save(newEmployee);
+
+        return EmployeeResponse.builder()
+                .id(response.getId())
+                .firstName(response.getFirstName())
+                .lastName(response.getLastName())
+                .email(response.getEmail())
+                .build();
     }
 
-    public Employee read(Long id){
+    public EmployeeResponse read(Long id) {
         Optional<Employee> employeeOptional = employeeRepository.findById(id);
 
-        if(employeeOptional.isEmpty()){
-           return new Employee();
+        if (employeeOptional.isEmpty()) {
+            return new EmployeeResponse();
         }
 
-        return  employeeOptional.get();
+        Employee employee = employeeOptional.get();
+
+        return EmployeeResponse.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .email(employee.getEmail())
+                .build();
+
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         employeeRepository.deleteById(id);
     }
 }

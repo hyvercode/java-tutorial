@@ -1,6 +1,8 @@
 package com.solusione.day2.controller;
 
 import com.solusione.day2.model.entity.Employee;
+import com.solusione.day2.model.request.EmployeeRequest;
+import com.solusione.day2.model.response.EmployeeResponse;
 import com.solusione.day2.service.EmployeeService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
@@ -29,17 +31,17 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Employee postCreateEmployee(@RequestBody Employee employee){
-        return employeeService.create(employee);
+    public EmployeeResponse postCreateEmployee(@RequestBody EmployeeRequest employeeRequest){
+        return employeeService.create(employeeRequest);
     }
 
     @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Employee postCreateEmployee(@PathVariable Long id,@RequestBody Employee employee){
-        return employeeService.update(id,employee);
+    public EmployeeResponse postUpdateEmployee(@PathVariable Long id,@RequestBody EmployeeRequest employeeRequest){
+        return employeeService.update(id,employeeRequest);
     }
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Employee getReadEmployee(@PathVariable Long id){
+    public EmployeeResponse getReadEmployee(@PathVariable Long id){
         return employeeService.read(id);
     }
 
