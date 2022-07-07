@@ -26,7 +26,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/paginate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<Employee> getPaginante(@Param("pageNo") int pageNo,@Param("pageSize") int pageSize){
+    public List<Employee> getPaginate(@Param("pageNo") int pageNo,@Param("pageSize") int pageSize){
         return employeeService.paginate(pageNo,pageSize);
     }
 
