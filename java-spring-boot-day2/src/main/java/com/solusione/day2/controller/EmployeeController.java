@@ -1,0 +1,50 @@
+package com.solusione.day2.controller;
+
+import com.solusione.day2.model.entity.Employee;
+import com.solusione.day2.service.EmployeeService;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/employees")
+public class EmployeeController {
+
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Employee> getListEmployee(){
+        return employeeService.list();
+    }
+
+    @GetMapping(value = "/paginate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Employee> getPaginante(@Param("pageNo") int pageNo,@Param("pageSize") int pageSize){
+        return employeeService.paginate(pageNo,pageSize);
+    }
+
+    @PostMapping(value = "",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Employee postCreateEmployee(@RequestBody Employee employee){
+        return employeeService.create(employee);
+    }
+
+    @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Employee postCreateEmployee(@PathVariable Long id,@RequestBody Employee employee){
+        return employeeService.update(id,employee);
+    }
+
+    @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Employee getReadEmployee(@PathVariable Long id){
+        return employeeService.read(id);
+    }
+
+    @DeleteMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteReadEmployee(@PathVariable Long id){
+        employeeService.delete(id);
+    }
+}
