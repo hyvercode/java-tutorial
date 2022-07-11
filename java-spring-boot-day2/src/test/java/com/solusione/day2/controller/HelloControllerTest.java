@@ -97,9 +97,6 @@ public class HelloControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
-
-        int content = result.getResponse().getContentLength();
-        Assertions.assertThat(content > 0);
     }
 
     public static String toJson(final Object obj) {

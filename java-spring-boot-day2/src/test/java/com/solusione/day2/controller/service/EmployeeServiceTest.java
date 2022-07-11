@@ -75,11 +75,11 @@ class EmployeeServiceTest {
     void paginateTest() throws Exception {
         Page<Employee> pagedResult = new PageImpl<>(employeeList);
         Pageable pageableTest = PageRequest.of(0, 10);
-        when(employeeRepository.findAll(eq(pageableTest))).thenReturn(pagedResult);
+        when(employeeRepository.findAll(pageableTest)).thenReturn(pagedResult);
         List<Employee> actual = employeeService.paginate(0,10);
 
         assertEquals(actual,employeeList);
-        verify(employeeRepository).findAll(eq(pageableTest));
+        verify(employeeRepository).findAll(pageableTest);
     }
 
 
