@@ -11,13 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,15 +47,6 @@ class EmployeeServiceTest {
             .lastName("One")
             .email("contact@solusine.id")
             .build();
-
-    public static final EmployeeResponse EMPLOYEE_RESPONSE = EmployeeResponse.builder()
-            .id(1L)
-            .firstName("Solusi")
-            .lastName("One")
-            .email("contact@solusine.id")
-            .build();
-
-    public static final Page<Employee> EMPLOYEE_PAGE = new PageImpl(Collections.singletonList(EMPLOYEE));
 
     public List<Employee> employeeList =new ArrayList<>();
 
