@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
@@ -18,14 +19,15 @@ import org.springframework.data.domain.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 
 @ExtendWith(MockitoExtension.class)
-public class EmployeeServiceTest {
+class EmployeeServiceTest {
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -62,7 +64,6 @@ public class EmployeeServiceTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         employeeList.add(EMPLOYEE);
     }
 
@@ -73,15 +74,54 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void getList() {
-        Page<Employee> employees = mock(Page.class);
-        when(employees.getContent()).thenReturn(Collections.singletonList(EMPLOYEE));
-        Pageable pageableTest = PageRequest.of(0, 1);
-        when(employeeRepository.findAll(eq(pageableTest))).thenReturn(EMPLOYEE_PAGE);
+    void listTest() throws Exception {
+        when(employeeRepository.findAll()).thenReturn(employeeList);
+        List<Employee> actual = employeeService.list();
 
-        List<Employee> baseResponse = employeeService.list();
+        assertNotNull(actual);
+        verify(employeeRepository).findAll();
+    }
 
+    @Test
+    void paginateTest() throws Exception {
+        Page<Employee> pagedResult = new PageImpl<>(employeeList);
+        Pageable pageableTest = PageRequest.of(0, 10);
+        when(employeeRepository.findAll(eq(pageableTest))).thenReturn(pagedResult);
+        List<Employee> actual = employeeService.paginate(0,10);
+
+        assertEquals(actual,employeeList);
         verify(employeeRepository).findAll(eq(pageableTest));
-        verify(modelMapper).map(EMPLOYEE,EmployeeRequest.class);
+    }
+
+
+    @Test
+    void createTest() throws Exception {
+        when(employeeRepository.save(any(Employee.class))).thenReturn(EMPLOYEE);
+
+        EmployeeResponse actual = employeeService.create(EMPLOYEE_REQUEST);
+
+        assertNotNull(actual.getId());
+        assertEquals(actual.getFirstName(),EMPLOYEE.getFirstName());
+        verify(employeeRepository).save(any(Employee.class));
+    }
+
+    @Test
+    void updateTest() throws Exception {
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.of(EMPLOYEE));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(EMPLOYEE);
+
+        EmployeeResponse actual = employeeService.update(anyLong(),EMPLOYEE_REQUEST);
+
+        assertNotNull(actual.getId());
+
+        verify(employeeRepository).findById(anyLong());
+        verify(employeeRepository).save(any(Employee.class));
+    }
+
+    @Test
+    void deleteTest() throws Exception {
+        willDoNothing().given(employeeRepository).deleteById(anyLong());
+        employeeService.delete(anyLong());
+        verify(employeeRepository).deleteById(anyLong());
     }
 }
