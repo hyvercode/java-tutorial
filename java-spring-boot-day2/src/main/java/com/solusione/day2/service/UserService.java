@@ -18,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -32,11 +31,9 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final PasswordEncoder bcryptEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder bcryptEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.bcryptEncoder = bcryptEncoder;
     }
 
     @Override
@@ -44,11 +41,13 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
         User user = User.builder()
                 .id(CommonUtil.generateUUIDString())
                 .email(input.getEmail())
-                .password(bcryptEncoder.encode(input.getPassword()))
+                .password(input.getPassword())
                 .active(input.getActive())
                 .build();
         user.setCreatedBy(Constant.CREATOR);
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedBy(Constant.CREATOR);
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
 
         return UserResponse.builder()
