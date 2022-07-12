@@ -1,8 +1,12 @@
 package com.solusione.day2.service;
 
+import com.hyvercode.solusione.helpers.base.BasePaginationRequest;
 import com.hyvercode.solusione.helpers.exception.BusinessException;
 import com.hyvercode.solusione.helpers.utils.CommonUtil;
 import com.hyvercode.solusione.helpers.utils.Constant;
+import com.hyvercode.solusione.helpers.utils.PageableUtil;
+import com.hyvercode.solusione.model.EmptyResponse;
+import com.hyvercode.solusione.model.PageRequest;
 import com.hyvercode.solusione.service.CrudService;
 import com.solusione.day2.helpers.Constants;
 import com.solusione.day2.model.entity.User;
@@ -14,15 +18,19 @@ import com.solusione.day2.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService implements CrudService<UserRequest, UserResponse, ListUserRequest, ListUserResponse, String> {
+public class UserService implements CrudService<UserRequest, UserResponse, PageRequest, ListUserResponse, String> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -56,9 +64,9 @@ public class UserService implements CrudService<UserRequest, UserResponse, ListU
     @Override
     public UserResponse read(String id) {
         Optional<User> optional = userRepository.findById(id);
-        if(optional.isEmpty()){
+        if (optional.isEmpty()) {
             logger.info(Constants.RESPONSE_CODE);
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE,Constants.RESPONSE_MESSAGE);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
         }
 
         User user = optional.get();
@@ -70,15 +78,15 @@ public class UserService implements CrudService<UserRequest, UserResponse, ListU
     }
 
     @Override
-    public UserResponse update(String id,UserRequest input) {
+    public UserResponse update(String id, UserRequest input) {
 
         Optional<User> optional = userRepository.findById(id);
-        if(optional.isEmpty()){
-            throw new BusinessException(HttpStatus.CONFLICT,Constants.RESPONSE_CODE,Constants.RESPONSE_MESSAGE);
+        if (optional.isEmpty()) {
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
         }
 
         User user = optional.get();
-        BeanUtils.copyProperties(input,user);
+        BeanUtils.copyProperties(input, user);
         user.setUpdatedBy(Constant.CREATOR);
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
@@ -91,12 +99,40 @@ public class UserService implements CrudService<UserRequest, UserResponse, ListU
     }
 
     @Override
-    public ListUserResponse paginate(ListUserRequest input) {
-        return null;
+    public ListUserResponse paginate(PageRequest input) {
+        Page<User> page = this.getPageResultByInput(input);
+        Set<UserResponse> outletResponses = page.getContent().stream().map(outlet -> {
+            UserResponse response = new UserResponse();
+            BeanUtils.copyProperties(outlet, response);
+            return response;
+        }).collect(Collectors.toSet());
+
+        return ListUserResponse.builder()
+                .content(outletResponses)
+                .pagination(PageableUtil.pageToPagination(page))
+                .build();
     }
 
     @Override
     public UserResponse delete(String id) {
-        return null;
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isEmpty()) {
+            logger.info(Constants.RESPONSE_CODE);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+        }
+
+        userRepository.delete(optional.get());
+
+        return new UserResponse();
+    }
+
+    private Page<User> getPageResultByInput(PageRequest pageRequest) {
+        String sortBy = pageRequest.getSortBy() != null && !pageRequest.getSortBy().isEmpty() ? pageRequest.getSortBy() : "id";
+        Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(), sortBy, pageRequest.getSortType(), pageRequest.getSearchBy(), pageRequest.getSearchParam());
+        Page<User> page = null;
+        if (pageRequest.getSearchBy() != null && pageRequest.getSortBy().equals("id")) {
+            page = userRepository.findByEmailAndActive(pageRequest.getSearchBy(), true, pageable);
+        }
+        return page;
     }
 }
