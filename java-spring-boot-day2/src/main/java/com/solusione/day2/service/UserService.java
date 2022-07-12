@@ -1,16 +1,13 @@
 package com.solusione.day2.service;
 
-import com.hyvercode.solusione.helpers.base.BasePaginationRequest;
 import com.hyvercode.solusione.helpers.exception.BusinessException;
 import com.hyvercode.solusione.helpers.utils.CommonUtil;
 import com.hyvercode.solusione.helpers.utils.Constant;
 import com.hyvercode.solusione.helpers.utils.PageableUtil;
-import com.hyvercode.solusione.model.EmptyResponse;
 import com.hyvercode.solusione.model.PageRequest;
 import com.hyvercode.solusione.service.CrudService;
 import com.solusione.day2.helpers.Constants;
 import com.solusione.day2.model.entity.User;
-import com.solusione.day2.model.request.user.ListUserRequest;
 import com.solusione.day2.model.request.user.UserRequest;
 import com.solusione.day2.model.response.user.ListUserResponse;
 import com.solusione.day2.model.response.user.UserResponse;
