@@ -54,7 +54,7 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
         /**
          * Check stock book
          */
-        Book book = checkStock(input.getBookId(),input.getQty());
+        Book book = checkStock(input.getBookId());
         if (book.getStock()<input.getQty()) {
             logger.info(Constants.RESPONSE_MESSAGE_30021);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30021, Constants.RESPONSE_MESSAGE_30021);
@@ -215,10 +215,9 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
     /**
      * Check Stock book
      * @param bookId
-     * @param qty
      * @return
      */
-    private Book checkStock(String bookId,Integer qty){
+    private Book checkStock(String bookId){
         Optional<Book> bookOptional = bookRepository.findById(bookId);
         if (bookOptional.isEmpty()) {
             logger.info(Constants.RESPONSE_MESSAGE_30020);
@@ -228,6 +227,10 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
         return bookOptional.get();
     }
 
+    /**
+     * Update stock book
+     * @param book
+     */
     private void updateStockBook(Book book){
         bookRepository.save(book);
     }
