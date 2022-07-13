@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends PagingAndSortingRepository<Book,String> {
 
-    Page<Book> findByEmailAndActive(String currencyName, boolean active, Pageable pageable);
+    Page<Book> findByTitleAndActive(String title, boolean active, Pageable pageable);
     Page<Book> findByActive(boolean active, Pageable pageable);
 }

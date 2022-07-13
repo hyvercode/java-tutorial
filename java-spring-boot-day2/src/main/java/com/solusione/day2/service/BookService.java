@@ -176,8 +176,8 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
         Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(),
                 sortBy, pageRequest.getSortType());
         Page<Book> page = null;
-        if (pageRequest.getSearchBy() != null && pageRequest.getSortBy().equals("id")) {
-            page = bookRepository.findByEmailAndActive(pageRequest.getSearchBy(), true, pageable);
+        if (pageRequest.getSearchBy() != null && pageRequest.getSortBy().equals("title")) {
+            page = bookRepository.findByTitleAndActive(pageRequest.getSearchBy(), true, pageable);
         }else{
             page = bookRepository.findByActive(true, pageable);
         }
