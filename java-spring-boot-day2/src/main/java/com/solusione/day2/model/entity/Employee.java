@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "employees")
 public class Employee implements Serializable {
+    private static final long serialVersionUID = -2155753233215409928L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

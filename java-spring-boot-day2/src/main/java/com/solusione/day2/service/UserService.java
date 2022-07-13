@@ -1,9 +1,12 @@
 package com.solusione.day2.service;
 
+import com.hyvercode.solusione.helpers.base.BaseResponse;
+import com.hyvercode.solusione.helpers.base.ResponseBuilder;
 import com.hyvercode.solusione.helpers.exception.BusinessException;
 import com.hyvercode.solusione.helpers.utils.CommonUtil;
 import com.hyvercode.solusione.helpers.utils.Constant;
 import com.hyvercode.solusione.helpers.utils.PageableUtil;
+import com.hyvercode.solusione.model.EmptyResponse;
 import com.hyvercode.solusione.model.PageRequest;
 import com.hyvercode.solusione.service.CrudService;
 import com.solusione.day2.helpers.Constants;
@@ -26,7 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements CrudService<UserRequest, UserResponse, PageRequest, ListUserResponse, String> {
+public class UserService implements CrudService<UserRequest, ResponseBuilder<BaseResponse>, PageRequest, String> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -37,7 +40,8 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
     }
 
     @Override
-    public UserResponse create(UserRequest input) {
+    public ResponseBuilder<BaseResponse> create(UserRequest input) {
+        final long start = CommonUtil.tok();
         User user = User.builder()
                 .id(CommonUtil.generateUUIDString())
                 .email(input.getEmail())
@@ -50,15 +54,21 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
 
-        return UserResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .active(user.getActive())
-                .build();
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                UserResponse.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .active(user.getActive())
+                        .build());
     }
 
+
     @Override
-    public UserResponse read(String id) {
+    public ResponseBuilder<BaseResponse> read(String id) {
+        final long start = CommonUtil.tok();
+
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
             logger.info(Constants.RESPONSE_CODE);
@@ -66,15 +76,20 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
         }
 
         User user = optional.get();
-        return UserResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .active(user.getActive())
-                .build();
+
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                UserResponse.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .active(user.getActive())
+                        .build());
     }
 
     @Override
-    public UserResponse update(String id, UserRequest input) {
+    public ResponseBuilder<BaseResponse> update(String id, UserRequest input) {
+        final long start = CommonUtil.tok();
 
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
@@ -87,15 +102,20 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
 
-        return UserResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .active(user.getActive())
-                .build();
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                UserResponse.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .active(user.getActive())
+                        .build());
     }
 
     @Override
-    public ListUserResponse paginate(PageRequest input) {
+    public ResponseBuilder<BaseResponse> paginate(PageRequest input) {
+        final long start = CommonUtil.tok();
+
         Page<User> page = this.getPageResultByInput(input);
         Set<UserResponse> outletResponses = page.getContent().stream().map(outlet -> {
             UserResponse response = new UserResponse();
@@ -103,14 +123,19 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
             return response;
         }).collect(Collectors.toSet());
 
-        return ListUserResponse.builder()
-                .content(outletResponses)
-                .pagination(PageableUtil.pageToPagination(page))
-                .build();
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                ListUserResponse.builder()
+                        .content(outletResponses)
+                        .pagination(PageableUtil.pageToPagination(page))
+                        .build());
     }
 
     @Override
-    public UserResponse delete(String id) {
+    public ResponseBuilder<BaseResponse> delete(String id) {
+        final long start = CommonUtil.tok();
+
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
             logger.info(Constants.RESPONSE_CODE);
@@ -119,12 +144,26 @@ public class UserService implements CrudService<UserRequest, UserResponse, PageR
 
         userRepository.delete(optional.get());
 
-        return new UserResponse();
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                new EmptyResponse());
+    }
+
+    @Override
+    public ResponseBuilder<BaseResponse> all(UserRequest input) {
+        final long start = CommonUtil.tok();
+        Iterable<User> users = userRepository.findAll();
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                users);
     }
 
     private Page<User> getPageResultByInput(PageRequest pageRequest) {
         String sortBy = pageRequest.getSortBy() != null && !pageRequest.getSortBy().isEmpty() ? pageRequest.getSortBy() : "id";
-        Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(), sortBy, pageRequest.getSortType(), pageRequest.getSearchBy(), pageRequest.getSearchParam());
+        Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(),
+                sortBy, pageRequest.getSortType());
         Page<User> page = null;
         if (pageRequest.getSearchBy() != null && pageRequest.getSortBy().equals("id")) {
             page = userRepository.findByEmailAndActive(pageRequest.getSearchBy(), true, pageable);
