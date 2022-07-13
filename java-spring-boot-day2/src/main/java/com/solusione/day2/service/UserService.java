@@ -141,6 +141,7 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
         final long start = CommonUtil.tok();
 
         Page<User> page = this.getPageResultByInput(input);
+
         Set<UserResponse> outletResponses = page.getContent().stream().map(outlet -> {
             UserResponse response = new UserResponse();
             BeanUtils.copyProperties(outlet, response);
