@@ -43,7 +43,6 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
     public BaseResponse create(UserRequest input) {
         final long start = CommonUtil.tok();
         User user = User.builder()
-                .id(CommonUtil.generateUUIDString())
                 .email(input.getEmail())
                 .password(input.getPassword())
                 .active(input.getActive())
@@ -135,19 +134,16 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
     @Override
     public  BaseResponse delete(String id) {
         final long start = CommonUtil.tok();
-
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
             logger.info(Constants.RESPONSE_CODE);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
         }
-
-        userRepository.delete(optional.get());
+        userRepository.deleteById(id);
 
         final long end = CommonUtil.tok();
 
-        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
-                new EmptyResponse());
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY);
     }
 
     @Override
