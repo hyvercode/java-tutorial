@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserResponse extends BaseResponse {
-
     private String id;
     private String email;
     private Boolean active;

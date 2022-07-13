@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements CrudService<UserRequest, ResponseBuilder<BaseResponse>, PageRequest, String> {
+public class UserService implements CrudService<UserRequest, BaseResponse, PageRequest, String> {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -40,7 +40,7 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
     }
 
     @Override
-    public ResponseBuilder<BaseResponse> create(UserRequest input) {
+    public BaseResponse create(UserRequest input) {
         final long start = CommonUtil.tok();
         User user = User.builder()
                 .id(CommonUtil.generateUUIDString())
@@ -66,7 +66,7 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
 
 
     @Override
-    public ResponseBuilder<BaseResponse> read(String id) {
+    public  BaseResponse read(String id) {
         final long start = CommonUtil.tok();
 
         Optional<User> optional = userRepository.findById(id);
@@ -88,7 +88,7 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
     }
 
     @Override
-    public ResponseBuilder<BaseResponse> update(String id, UserRequest input) {
+    public  BaseResponse update(String id, UserRequest input) {
         final long start = CommonUtil.tok();
 
         Optional<User> optional = userRepository.findById(id);
@@ -113,7 +113,7 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
     }
 
     @Override
-    public ResponseBuilder<BaseResponse> paginate(PageRequest input) {
+    public  BaseResponse paginate(PageRequest input) {
         final long start = CommonUtil.tok();
 
         Page<User> page = this.getPageResultByInput(input);
@@ -133,7 +133,7 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
     }
 
     @Override
-    public ResponseBuilder<BaseResponse> delete(String id) {
+    public  BaseResponse delete(String id) {
         final long start = CommonUtil.tok();
 
         Optional<User> optional = userRepository.findById(id);
@@ -151,7 +151,7 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
     }
 
     @Override
-    public ResponseBuilder<BaseResponse> all(UserRequest input) {
+    public  BaseResponse all(UserRequest input) {
         final long start = CommonUtil.tok();
         Iterable<User> users = userRepository.findAll();
         final long end = CommonUtil.tok();
@@ -161,12 +161,14 @@ public class UserService implements CrudService<UserRequest, ResponseBuilder<Bas
     }
 
     private Page<User> getPageResultByInput(PageRequest pageRequest) {
-        String sortBy = pageRequest.getSortBy() != null && !pageRequest.getSortBy().isEmpty() ? pageRequest.getSortBy() : "id";
+        String sortBy = pageRequest.getSortBy() != null && !pageRequest.getSortBy().isEmpty() ? pageRequest.getSortBy() : "created_at";
         Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(),
                 sortBy, pageRequest.getSortType());
         Page<User> page = null;
         if (pageRequest.getSearchBy() != null && pageRequest.getSortBy().equals("id")) {
             page = userRepository.findByEmailAndActive(pageRequest.getSearchBy(), true, pageable);
+        }else{
+            page = userRepository.findByActive(true, pageable);
         }
         return page;
     }

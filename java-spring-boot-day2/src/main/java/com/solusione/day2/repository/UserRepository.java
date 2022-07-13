@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface UserRepository extends PagingAndSortingRepository<User,String> {
 
     Page<User> findByEmailAndActive(String currencyName, boolean active, Pageable pageable);
-
+    Page<User> findByActive(boolean active, Pageable pageable);
     Optional<User>findByEmail(String email);
 }

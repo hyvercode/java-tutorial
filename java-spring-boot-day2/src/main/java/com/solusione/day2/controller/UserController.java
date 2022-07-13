@@ -4,8 +4,6 @@ import com.hyvercode.solusione.helpers.base.BaseResponse;
 import com.hyvercode.solusione.helpers.base.ResponseBuilder;
 import com.hyvercode.solusione.model.PageRequest;
 import com.solusione.day2.model.request.user.UserRequest;
-import com.solusione.day2.model.response.user.ListUserResponse;
-import com.solusione.day2.model.response.user.UserResponse;
 import com.solusione.day2.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,32 +20,32 @@ public class UserController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBuilder<BaseResponse> getAllUsers(UserRequest request){
+    public  BaseResponse getAllUsers(UserRequest request){
         return userService.all(request);
     }
 
-    @GetMapping(value = "/paginate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBuilder<BaseResponse> getPaginateUsers(PageRequest request){
+    @GetMapping(value = "/paginate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public  BaseResponse getPaginateUsers(PageRequest request){
         return userService.paginate(request);
     }
 
     @PostMapping(value = "",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBuilder<BaseResponse> createUsers(@RequestBody UserRequest userRequest){
+    public  BaseResponse createUsers(@RequestBody UserRequest userRequest){
         return userService.create(userRequest);
     }
 
     @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBuilder<BaseResponse> updateUsers(@PathVariable String id,@RequestBody UserRequest userRequest){
+    public  BaseResponse updateUsers(@PathVariable String id,@RequestBody UserRequest userRequest){
         return userService.update(id,userRequest);
     }
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBuilder<BaseResponse> readUsers(@PathVariable String id){
+    public  BaseResponse readUsers(@PathVariable String id){
         return userService.read(id);
     }
 
     @DeleteMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBuilder<BaseResponse> deleteUsers(@PathVariable String id){
+    public  BaseResponse deleteUsers(@PathVariable String id){
         return userService.delete(id);
     }
 }
