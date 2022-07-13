@@ -74,8 +74,8 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
 
         Optional<Book> optional = bookRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE);
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         Book book = optional.get();
@@ -101,8 +101,8 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
 
         Optional<Book> optional = bookRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE);
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         Book book = optional.get();
@@ -131,8 +131,8 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
         final long start = CommonUtil.tok();
         Optional<Book> optional = bookRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE);
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
         bookRepository.deleteById(id);
         final long end = CommonUtil.tok();

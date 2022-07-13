@@ -1,5 +1,6 @@
 package com.solusione.day2.model.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -24,10 +26,10 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "books")
-@SQLDelete(sql = "UPDATE books SET deleted_at=NOW() where id=?")
+@Table(name = "orders")
+@SQLDelete(sql = "UPDATE orders SET deleted_at=NOW() where id=?")
 @Where(clause = "deleted_at is NULL")
-public class Book extends BaseEntity {
+public class Order extends BaseEntity {
 
     private static final long serialVersionUID = -2155753233215409928L;
 
@@ -37,26 +39,18 @@ public class Book extends BaseEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
 
-    @Column(name = "title",length = 60,nullable = false)
-    private String title;
+    @Column(name = "order_date")
+    private Date orderDate;
 
-    @Column(name = "description",length = 200)
-    private String description;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    @Column(name = "qty",nullable = false)
+    private Integer qty;
 
     @Column(name = "price")
-    private BigDecimal price;
-
-    @Column(name = "discount")
-    private BigDecimal discount;
-
-    @Column(name = "stock",nullable = false)
-    private Integer stock;
-
-    @Column(name = "author",length = 60,nullable = false)
-    private String author;
-
-    @Column(name = "active")
-    private Boolean active;
+    private BigDecimal amount;
 
     @Column(name = "deleted_at")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

@@ -69,8 +69,8 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
 
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_CODE);
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+            logger.info(Constants.RESPONSE_CODE_30020);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         User user = optional.get();
@@ -91,7 +91,7 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
 
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         User user = optional.get();
@@ -116,8 +116,8 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
         final long start = CommonUtil.tok();
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_CODE);
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE, Constants.RESPONSE_MESSAGE);
+            logger.info(Constants.RESPONSE_CODE_30020);
+            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
         userRepository.deleteById(id);
 
@@ -169,4 +169,5 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
         }
         return page;
     }
+
 }
