@@ -6,7 +6,6 @@ import com.hyvercode.solusione.helpers.exception.BusinessException;
 import com.hyvercode.solusione.helpers.utils.CommonUtil;
 import com.hyvercode.solusione.helpers.utils.Constant;
 import com.hyvercode.solusione.helpers.utils.PageableUtil;
-import com.hyvercode.solusione.model.EmptyResponse;
 import com.hyvercode.solusione.model.PageRequest;
 import com.hyvercode.solusione.service.CrudService;
 import com.solusione.day2.helpers.Constants;
@@ -111,25 +110,6 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
                         .build());
     }
 
-    @Override
-    public  BaseResponse paginate(PageRequest input) {
-        final long start = CommonUtil.tok();
-
-        Page<User> page = this.getPageResultByInput(input);
-        Set<UserResponse> outletResponses = page.getContent().stream().map(outlet -> {
-            UserResponse response = new UserResponse();
-            BeanUtils.copyProperties(outlet, response);
-            return response;
-        }).collect(Collectors.toSet());
-
-        final long end = CommonUtil.tok();
-
-        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
-                ListUserResponse.builder()
-                        .content(outletResponses)
-                        .pagination(PageableUtil.pageToPagination(page))
-                        .build());
-    }
 
     @Override
     public  BaseResponse delete(String id) {
@@ -154,6 +134,26 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
 
         return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
                 users);
+    }
+
+    @Override
+    public  BaseResponse paginate(PageRequest input) {
+        final long start = CommonUtil.tok();
+
+        Page<User> page = this.getPageResultByInput(input);
+        Set<UserResponse> outletResponses = page.getContent().stream().map(outlet -> {
+            UserResponse response = new UserResponse();
+            BeanUtils.copyProperties(outlet, response);
+            return response;
+        }).collect(Collectors.toSet());
+
+        final long end = CommonUtil.tok();
+
+        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+                ListUserResponse.builder()
+                        .content(outletResponses)
+                        .pagination(PageableUtil.pageToPagination(page))
+                        .build());
     }
 
     private Page<User> getPageResultByInput(PageRequest pageRequest) {
