@@ -35,31 +35,19 @@ public class User extends BaseEntity {
     private static final long serialVersionUID = -2155753233215409928L;
 
     @Id
-    @Column(name = "id")
-    @Size(max = 36)
-    @NotNull
-    @NotEmpty
+    @Column(name = "id",length = 36,nullable = false,unique = true)
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
 
-    @Column(name = "email")
-    @Size(max = 30)
-    @NotNull
-    @NotEmpty
+    @Column(name = "email",length = 30,nullable = false,unique = true)
     @Email
     private String email;
 
-    @Column(name = "password")
-    @Size(max = 255)
-    @NotNull
-    @NotEmpty
+    @Column(name = "password",length = 30,nullable = false)
     private String password;
 
     @Column(name = "active")
-    @Size(max = 1)
-    @NotNull
-    @NotEmpty
     private Boolean active;
 
     @Column(name = "deleted_at")
