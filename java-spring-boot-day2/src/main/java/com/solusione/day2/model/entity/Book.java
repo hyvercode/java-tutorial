@@ -50,7 +50,7 @@ public class Book extends BaseEntity {
     @Column(name = "price",length = 20,precision = 2)
     private BigDecimal price;
 
-    @Column(name = "discount",precision = 2)
+    @Column(name = "discount",length = 20,precision = 2)
     private BigDecimal discount;
 
     @Column(name = "stock",nullable = false)
