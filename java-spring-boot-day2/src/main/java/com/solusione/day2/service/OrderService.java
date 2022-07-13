@@ -209,13 +209,7 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
         String sortBy = pageRequest.getSortBy() != null && !pageRequest.getSortBy().isEmpty() ? pageRequest.getSortBy() : "created_at";
         Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(),
                 sortBy, pageRequest.getSortType());
-        Page<Order> page = null;
-        if (pageRequest.getSearchBy() != null && pageRequest.getSortBy().equals("id")) {
-            page = orderRepository.findByBookId(pageRequest.getSearchBy(),pageable);
-        }else{
-            page = orderRepository.findAll(pageable);
-        }
-        return page;
+        return orderRepository.findAll(pageable);
     }
 
     /**
