@@ -1,7 +1,6 @@
 package com.solusione.day2.model.response.payment;
 
 import com.hyvercode.solusione.helpers.base.BaseResponse;
-import com.solusione.day2.model.entity.Order;
 import com.solusione.day2.model.enums.Status;
 import com.solusione.day2.model.response.order.OrderResponse;
 import lombok.AllArgsConstructor;
