@@ -164,4 +164,14 @@ class EmployeeControllerTest {
                 .andReturn();
     }
 
+    @Test
+    void deleteEmployeeTest() throws Exception {
+        mockMvc.perform(delete("/api/employees/1")
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
 }

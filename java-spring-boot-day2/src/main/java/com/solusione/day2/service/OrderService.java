@@ -180,7 +180,7 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
         Iterable<Order> orders = orderRepository.findAll();
         final long end = CommonUtil.tok();
 
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY,
+        return (BaseResponse) ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY,
                 orders);
     }
 

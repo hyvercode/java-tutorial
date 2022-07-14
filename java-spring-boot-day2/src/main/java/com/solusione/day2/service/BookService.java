@@ -38,7 +38,7 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
     }
 
     @Override
-    public BaseResponse create(BookRequest input) {
+    public BookResponse create(BookRequest input) {
         final long start = CommonUtil.tok();
         Book book = Book.builder()
                 .title(input.getTitle())
@@ -146,7 +146,7 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
         Iterable<Book> books = bookRepository.findAll();
         final long end = CommonUtil.tok();
 
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY,
+        return (BaseResponse) ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY,
                 books);
     }
 
@@ -156,9 +156,9 @@ public class BookService implements CrudService<BookRequest, BaseResponse, PageR
 
         Page<Book> page = this.getPageResultByInput(input);
 
-        Set<BookResponse> bookResponses = page.getContent().stream().map(outlet -> {
+        Set<BookResponse> bookResponses = page.getContent().stream().map(book -> {
             BookResponse response = new BookResponse();
-            BeanUtils.copyProperties(outlet, response);
+            BeanUtils.copyProperties(book, response);
             return response;
         }).collect(Collectors.toSet());
 

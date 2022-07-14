@@ -132,7 +132,7 @@ public class UserService implements CrudService<UserRequest, BaseResponse, PageR
         Iterable<User> users = userRepository.findAll();
         final long end = CommonUtil.tok();
 
-        return ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
+        return (BaseResponse) ResponseBuilder.buildResponse(HttpStatus.OK, ((end - start) / 1000000), Constant.PROCESS_SUCCESSFULLY,
                 users);
     }
 
