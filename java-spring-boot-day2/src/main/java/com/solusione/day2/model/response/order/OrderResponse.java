@@ -17,7 +17,7 @@ public class OrderResponse extends BaseResponse {
 
     private String id;
     private Date orderDate;
-    private BookResponse bookResponse;
+    private BookResponse book;
     private Integer qty;
     private BigDecimal amount;
 

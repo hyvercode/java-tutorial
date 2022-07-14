@@ -1,13 +1,16 @@
 package com.solusione.day2.model.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.hyvercode.solusione.helpers.base.BaseEntity;
-import lombok.*;
+import com.solusione.day2.model.enums.Status;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -23,11 +26,10 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orders")
-@SQLDelete(sql = "UPDATE orders SET deleted_at=NOW() where id=?")
+@Table(name = "payments")
+@SQLDelete(sql = "UPDATE payments SET deleted_at=NOW() where id=?")
 @Where(clause = "deleted_at is NULL")
-public class Order extends BaseEntity {
-
+public class Payment extends BaseEntity {
     private static final long serialVersionUID = -2155753233215409928L;
 
     @Id
@@ -36,17 +38,17 @@ public class Order extends BaseEntity {
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
 
-    @Column(name = "order_date")
+    @Column(name = "payment_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date orderDate;
+    private Date paymentDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @Column(name = "qty", nullable = false)
-    private Integer qty;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column(name = "amount")
     private BigDecimal amount;
