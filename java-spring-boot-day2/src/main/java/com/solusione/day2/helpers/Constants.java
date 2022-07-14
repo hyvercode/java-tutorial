@@ -10,6 +10,6 @@ public class Constants {
 
     public static final String RESPONSE_MESSAGE_30022 = "Your amount not enough";
 
-    private void Constants() {
+    public Constants() {
     }
 }
