@@ -98,13 +98,13 @@ public class BooksServiceTest {
     }
 
 
-//    @Test
-//    void createTest() throws Exception {
-//        when(bookRepository.save(any(Book.class))).thenReturn(book);
-//
-//        BookResponse actual =bookService.create(bookRequest);
-//        assertEquals(actual.getActive(),book.getActive());
-//        verify(bookRepository).save(any(Book.class));
-//    }
+    @Test
+    void createTest() throws Exception {
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
+
+        BookResponse actual =bookService.create(bookRequest);
+        assertEquals(actual.getActive(),book.getActive());
+        verify(bookRepository).save(any(Book.class));
+    }
 
 }
