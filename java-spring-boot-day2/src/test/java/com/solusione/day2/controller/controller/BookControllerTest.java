@@ -1,7 +1,7 @@
 package com.solusione.day2.controller.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hyvercode.solusione.helpers.utils.Constant;
+import com.hyvercode.common.util.Constant;
 import com.solusione.day2.controller.BookController;
 import com.solusione.day2.model.entity.Book;
 import com.solusione.day2.model.request.book.BookRequest;

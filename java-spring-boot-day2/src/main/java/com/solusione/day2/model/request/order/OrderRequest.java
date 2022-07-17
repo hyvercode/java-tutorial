@@ -1,6 +1,6 @@
 package com.solusione.day2.model.request.order;
 
-import com.hyvercode.solusione.helpers.base.BaseRequest;
+import com.hyvercode.common.base.BaseRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

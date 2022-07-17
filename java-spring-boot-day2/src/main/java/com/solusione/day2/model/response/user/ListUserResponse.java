@@ -1,7 +1,7 @@
 package com.solusione.day2.model.response.user;
 
-import com.hyvercode.solusione.helpers.base.BasePaginationResponse;
-import com.hyvercode.solusione.model.Pagination;
+import com.hyvercode.common.base.BasePaginationResponse;
+import com.hyvercode.common.model.Pagination;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

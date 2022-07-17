@@ -1,6 +1,6 @@
 package com.solusione.day2.controller;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
+import com.hyvercode.common.base.BaseResponse;
 import com.solusione.day2.model.request.payment.PaymentRequest;
 import com.solusione.day2.service.PaymentService;
 import org.springframework.http.MediaType;

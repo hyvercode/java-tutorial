@@ -1,13 +1,12 @@
 package com.solusione.day2.service;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
-import com.hyvercode.solusione.helpers.base.ResponseBuilder;
-import com.hyvercode.solusione.helpers.exception.BusinessException;
-import com.hyvercode.solusione.helpers.utils.CommonUtil;
-import com.hyvercode.solusione.helpers.utils.Constant;
-import com.hyvercode.solusione.helpers.utils.PageableUtil;
-import com.hyvercode.solusione.model.PageRequest;
-import com.hyvercode.solusione.service.CrudService;
+import com.hyvercode.common.base.BasePaginationRequest;
+import com.hyvercode.common.base.BaseResponse;
+import com.hyvercode.common.base.BaseResponseBuilder;
+import com.hyvercode.common.exception.BusinessException;
+import com.hyvercode.common.service.BaseCrudService;
+import com.hyvercode.common.util.Constant;
+import com.hyvercode.common.util.PageableUtil;
 import com.solusione.day2.helpers.Constants;
 import com.solusione.day2.model.entity.Book;
 import com.solusione.day2.model.entity.Order;
@@ -17,8 +16,7 @@ import com.solusione.day2.model.response.order.ListOrderResponse;
 import com.solusione.day2.model.response.order.OrderResponse;
 import com.solusione.day2.repository.BookRepository;
 import com.solusione.day2.repository.OrderRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +32,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderService implements CrudService<OrderRequest, BaseResponse, PageRequest, String> {
-
-    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+@Log4j2
+public class OrderService implements BaseCrudService<OrderRequest, BaseResponse, BasePaginationRequest, String> {
 
     private final BookRepository bookRepository;
     private final OrderRepository orderRepository;
@@ -49,14 +46,12 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
     @Override
     @Transactional
     public BaseResponse create(OrderRequest input) {
-        final long start = CommonUtil.tok();
-
         /**
          * Check stock book
          */
         Book book = checkStock(input.getBookId());
         if (book.getStock()<input.getQty()) {
-            logger.info(Constants.RESPONSE_MESSAGE_30021);
+            log.info(Constants.RESPONSE_MESSAGE_30021);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30021, Constants.RESPONSE_MESSAGE_30021);
         }
 
@@ -80,9 +75,7 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
         book.setStock(book.getStock() - input.getQty());
         updateStockBook(book);
 
-        final long end = CommonUtil.tok();
-
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start, end), Constant.PROCESS_SUCCESSFULLY,
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY,
                 OrderResponse.builder()
                         .id(newOrder.getId())
                         .orderDate(newOrder.getOrderDate())
@@ -94,25 +87,20 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
                                 .build())
                         .qty(newOrder.getQty())
                         .amount(newOrder.getAmount())
-                        .build()
-        );
+                        .build());
     }
 
     @Override
     public BaseResponse read(String id) {
-        final long start = CommonUtil.tok();
-
         Optional<Order> optional = orderRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            log.info(Constants.RESPONSE_MESSAGE_30020);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         Order order = optional.get();
 
-        final long end = CommonUtil.tok();
-
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start, end), Constant.PROCESS_SUCCESSFULLY,
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY,
                 OrderResponse.builder()
                         .id(order.getId())
                         .orderDate(order.getOrderDate())
@@ -129,11 +117,9 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
 
     @Override
     public BaseResponse update(String id, OrderRequest input) {
-        final long start = CommonUtil.tok();
-
         Optional<Order> optional = orderRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            log.info(Constants.RESPONSE_MESSAGE_30020);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
@@ -143,9 +129,7 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
         order.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         orderRepository.save(order);
 
-        final long end = CommonUtil.tok();
-
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start, end), Constant.PROCESS_SUCCESSFULLY,
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY,
                 OrderResponse.builder()
                         .id(order.getId())
                         .orderDate(order.getOrderDate())
@@ -162,32 +146,25 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
 
     @Override
     public BaseResponse delete(String id) {
-        final long start = CommonUtil.tok();
         Optional<Order> optional = orderRepository.findById(id);
         if (optional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            log.info(Constants.RESPONSE_MESSAGE_30020);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
         orderRepository.deleteById(id);
-        final long end = CommonUtil.tok();
 
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY);
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY);
     }
 
     @Override
     public BaseResponse all(OrderRequest input) {
-        final long start = CommonUtil.tok();
         Iterable<Order> orders = orderRepository.findAll();
-        final long end = CommonUtil.tok();
-
-        return (BaseResponse) ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY,
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY,
                 orders);
     }
 
     @Override
-    public  BaseResponse paginate(PageRequest input) {
-        final long start = CommonUtil.tok();
-
+    public  BaseResponse paginate(BasePaginationRequest input) {
         Page<Order> page = this.getPageResultByInput(input);
 
         Set<OrderResponse> orderResponses = page.getContent().stream().map(outlet -> {
@@ -196,16 +173,15 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
             return response;
         }).collect(Collectors.toSet());
 
-        final long end = CommonUtil.tok();
 
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start,end), Constant.PROCESS_SUCCESSFULLY,
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY,
                 ListOrderResponse.builder()
                         .content(orderResponses)
                         .pagination(PageableUtil.pageToPagination(page))
                         .build());
     }
 
-    private Page<Order> getPageResultByInput(PageRequest pageRequest) {
+    private Page<Order> getPageResultByInput(BasePaginationRequest pageRequest) {
         String sortBy = pageRequest.getSortBy() != null && !pageRequest.getSortBy().isEmpty() ? pageRequest.getSortBy() : "created_at";
         Pageable pageable = PageableUtil.createPageRequest(pageRequest, pageRequest.getPageSize(), pageRequest.getPageNumber(),
                 sortBy, pageRequest.getSortType());
@@ -220,7 +196,7 @@ public class OrderService implements CrudService<OrderRequest, BaseResponse, Pag
     private Book checkStock(String bookId){
         Optional<Book> bookOptional = bookRepository.findById(bookId);
         if (bookOptional.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            log.info(Constants.RESPONSE_MESSAGE_30020);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 

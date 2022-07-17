@@ -1,7 +1,7 @@
 package com.solusione.day2.controller;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
-import com.hyvercode.solusione.model.PageRequest;
+import com.hyvercode.common.base.BasePaginationRequest;
+import com.hyvercode.common.base.BaseResponse;
 import com.solusione.day2.model.request.order.OrderRequest;
 import com.solusione.day2.service.OrderService;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/paginate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public  BaseResponse getPaginateOrders(PageRequest request){
+    public  BaseResponse getPaginateOrders(BasePaginationRequest request){
         return orderService.paginate(request);
     }
 

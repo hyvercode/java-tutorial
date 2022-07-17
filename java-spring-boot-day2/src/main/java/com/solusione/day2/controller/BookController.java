@@ -1,7 +1,7 @@
 package com.solusione.day2.controller;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
-import com.hyvercode.solusione.model.PageRequest;
+import com.hyvercode.common.base.BasePaginationRequest;
+import com.hyvercode.common.base.BaseResponse;
 import com.solusione.day2.model.request.book.BookRequest;
 import com.solusione.day2.service.BookService;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ public class BookController {
     }
 
     @GetMapping(value = "/paginate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public  BaseResponse getPaginateBooks(PageRequest request){
+    public  BaseResponse getPaginateBooks(BasePaginationRequest request){
         return bookService.paginate(request);
     }
 

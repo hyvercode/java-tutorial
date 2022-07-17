@@ -1,11 +1,10 @@
 package com.solusione.day2.service;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
-import com.hyvercode.solusione.helpers.base.ResponseBuilder;
-import com.hyvercode.solusione.helpers.exception.BusinessException;
-import com.hyvercode.solusione.helpers.utils.CommonUtil;
-import com.hyvercode.solusione.helpers.utils.Constant;
-import com.hyvercode.solusione.service.BaseService;
+import com.hyvercode.common.base.BaseResponse;
+import com.hyvercode.common.base.BaseResponseBuilder;
+import com.hyvercode.common.exception.BusinessException;
+import com.hyvercode.common.service.BaseService;
+import com.hyvercode.common.util.Constant;
 import com.solusione.day2.helpers.Constants;
 import com.solusione.day2.model.entity.Order;
 import com.solusione.day2.model.entity.Payment;
@@ -16,8 +15,7 @@ import com.solusione.day2.model.response.order.OrderResponse;
 import com.solusione.day2.model.response.payment.PaymentResponse;
 import com.solusione.day2.repository.OrderRepository;
 import com.solusione.day2.repository.PaymentRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +24,8 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
+@Log4j2
 public class PaymentService implements BaseService<PaymentRequest, BaseResponse> {
-
-    private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
 
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
@@ -40,17 +37,15 @@ public class PaymentService implements BaseService<PaymentRequest, BaseResponse>
 
     @Override
     public BaseResponse execute(PaymentRequest input) {
-        final long start = CommonUtil.tok();
-
         Optional<Order> optionalOrder = orderRepository.findById(input.getOrderId());
         if (optionalOrder.isEmpty()) {
-            logger.info(Constants.RESPONSE_MESSAGE_30020);
+            log.info(Constants.RESPONSE_MESSAGE_30020);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         Order order = optionalOrder.get();
         if (input.getStatus().equals(Status.PAID) && order.getAmount().compareTo(input.getAmount()) < 0) {
-            logger.info(Constants.RESPONSE_MESSAGE_30022);
+            log.info(Constants.RESPONSE_MESSAGE_30022);
             throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30022, Constants.RESPONSE_MESSAGE_30022);
         }
 
@@ -64,9 +59,7 @@ public class PaymentService implements BaseService<PaymentRequest, BaseResponse>
         payment.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         Payment newPayment = paymentRepository.save(payment);
 
-        final long end = CommonUtil.tok();
-
-        return ResponseBuilder.buildResponse(HttpStatus.OK, CommonUtil.calculateTok(start, end), Constant.PROCESS_SUCCESSFULLY,
+        return new BaseResponseBuilder<>(Constant.CODE_OK,Constant.PROCESS_SUCCESSFULLY,
                 PaymentResponse.builder()
                         .id(newPayment.getId())
                         .paymentDate(newPayment.getPaymentDate())

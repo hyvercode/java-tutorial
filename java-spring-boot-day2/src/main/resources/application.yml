@@ -29,11 +29,10 @@ spring:
     generate-ddl: true
   # Logger configuration
   logging:
-    pattern:
-      console: "%d %-5level %logger : %msg%n"
     level:
-      org.springframework: info
-      org.hibernate: debug
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql: TRACE
+      org.springframework: INFO
 
 server:
   port : 7070

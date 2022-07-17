@@ -1,6 +1,6 @@
 package com.solusione.day2.model.response.order;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
+import com.hyvercode.common.base.BaseResponse;
 import com.solusione.day2.model.response.book.BookResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

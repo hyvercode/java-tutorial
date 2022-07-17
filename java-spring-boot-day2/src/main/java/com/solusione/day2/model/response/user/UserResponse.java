@@ -1,6 +1,6 @@
 package com.solusione.day2.model.response.user;
 
-import com.hyvercode.solusione.helpers.base.BaseResponse;
+import com.hyvercode.common.base.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

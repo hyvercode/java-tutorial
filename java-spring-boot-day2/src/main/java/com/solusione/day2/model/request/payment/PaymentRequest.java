@@ -1,6 +1,6 @@
 package com.solusione.day2.model.request.payment;
 
-import com.hyvercode.solusione.helpers.base.BaseRequest;
+import com.hyvercode.common.base.BaseRequest;
 import com.solusione.day2.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

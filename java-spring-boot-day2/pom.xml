@@ -27,14 +27,6 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub hyvercode Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/hyvercode/commons-helpers/</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
-
-		<repository>
-			<id>github</id>
-			<name>GitHub hyvercode Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/hyvercode/core-helper/</url>
 			<releases><enabled>true</enabled></releases>
 			<snapshots><enabled>true</enabled></snapshots>
@@ -114,14 +106,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.hyvercode.solusione</groupId>
-			<artifactId>commons-helpers</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.hyvercode.solusione</groupId>
-			<artifactId>core-helper</artifactId>
+			<groupId>com.hyvercode</groupId>
+			<artifactId>common-helper</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
