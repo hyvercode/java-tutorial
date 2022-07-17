@@ -80,7 +80,8 @@ public class UserService implements BaseCrudService<UserRequest, BaseResponse, B
     public  BaseResponse update(String id, UserRequest input) {
         Optional<User> optional = userRepository.findById(id);
         if (optional.isEmpty()) {
-            throw new BusinessException(HttpStatus.CONFLICT, Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
+            log.error("Error with User ID {} Fail to Retrieve User", id);
+            throw new BusinessException(Constants.RESPONSE_CODE_30020, Constants.RESPONSE_MESSAGE_30020);
         }
 
         User user = optional.get();
